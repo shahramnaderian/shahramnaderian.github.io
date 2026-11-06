@@ -1,0 +1,15 @@
+"use strict";
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const core=require("../core.js");
+test("single-phase current calculation",()=>assert.ok(Math.abs(core.currentFromPower({powerW:5000,voltageV:230,powerFactor:.9,phase:1})-24.154589)<.001));
+test("three-phase current calculation",()=>assert.ok(Math.abs(core.currentFromPower({powerW:30000,voltageV:400,powerFactor:.9,phase:3})-48.1125)<.01));
+test("single-phase power calculation",()=>assert.equal(core.powerFromCurrent({currentA:10,voltageV:230,powerFactor:1,phase:1}),2300));
+test("three-phase power calculation",()=>assert.ok(Math.abs(core.powerFromCurrent({currentA:10,voltageV:400,powerFactor:1,phase:3})-6928.203)<.01));
+test("demand applies user-provided simultaneity",()=>{const r=core.demand({installedPowerKW:30,simultaneity:.8,powerFactor:.9,voltageV:400,phase:3});assert.equal(r.demandKW,24);assert.ok(r.currentA>0)});
+test("single-phase resistive voltage drop includes return path",()=>{const r=core.resistiveVoltageDrop({currentA:10,lengthM:20,areaMm2:2.5,resistivity:.0175,phase:1,voltageV:230});assert.ok(Math.abs(r.dropV-2.8)<1e-9)});
+test("three-phase resistive voltage drop",()=>{const r=core.resistiveVoltageDrop({currentA:10,lengthM:20,areaMm2:2.5,resistivity:.0175,phase:3,voltageV:400});assert.ok(Math.abs(r.dropV-2.424871)<.00001)});
+test("cable takeoff includes waste",()=>{const r=core.cableTakeoff({runs:12,lengthM:8,cores:3,wastePercent:10});assert.equal(r.baseM,288);assert.equal(r.totalM,316.8)});
+test("rejects invalid power factor",()=>assert.throws(()=>core.currentFromPower({powerW:1000,voltageV:230,powerFactor:1.2,phase:1}),RangeError));
+test("rejects invalid phase",()=>assert.throws(()=>core.currentFromPower({powerW:1000,voltageV:230,powerFactor:1,phase:2}),RangeError));
+test("rejects negative simultaneity",()=>assert.throws(()=>core.demand({installedPowerKW:10,simultaneity:-.1,voltageV:400,phase:3}),RangeError));
