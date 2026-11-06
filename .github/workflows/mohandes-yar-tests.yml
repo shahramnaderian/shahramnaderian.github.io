@@ -1,0 +1,25 @@
+name: مهندس‌یار برق - tests
+on:
+  push:
+    paths:
+      - "mohandes-yar/**"
+      - ".github/workflows/mohandes-yar-tests.yml"
+  pull_request:
+    paths:
+      - "mohandes-yar/**"
+      - ".github/workflows/mohandes-yar-tests.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mohandes-yar
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run unit tests
+        run: npm test
