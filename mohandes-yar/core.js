@@ -1,0 +1,12 @@
+(function(root,factory){if(typeof module==="object"&&module.exports){module.exports=factory()}else{root.ElectricalCore=factory()}})(typeof globalThis!=="undefined"?globalThis:this,function(){
+"use strict";
+const SQRT3=Math.sqrt(3);
+function positive(name,value){if(!Number.isFinite(value)||value<=0)throw new RangeError(name+" باید عددی بزرگ‌تر از صفر باشد.");return value}
+function factor(name,value,min,max){if(!Number.isFinite(value)||value<min||value>max)throw new RangeError(name+" خارج از محدوده مجاز است.");return value}
+function currentFromPower({powerW,voltageV,powerFactor=1,phase=1}){positive("توان",powerW);positive("ولتاژ",voltageV);factor("ضریب توان",powerFactor,0.1,1);if(phase!==1&&phase!==3)throw new RangeError("فاز باید ۱ یا ۳ باشد.");return powerW/(phase===1?voltageV*powerFactor:SQRT3*voltageV*powerFactor)}
+function powerFromCurrent({currentA,voltageV,powerFactor=1,phase=1}){positive("جریان",currentA);positive("ولتاژ",voltageV);factor("ضریب توان",powerFactor,0.1,1);if(phase!==1&&phase!==3)throw new RangeError("فاز باید ۱ یا ۳ باشد.");return currentA*voltageV*powerFactor*(phase===1?1:SQRT3)}
+function demand({installedPowerKW,simultaneity,powerFactor=1,voltageV,phase=3}){positive("بار نصب‌شده",installedPowerKW);factor("ضریب هم‌زمانی",simultaneity,0,1);const demandKW=installedPowerKW*simultaneity;const currentA=currentFromPower({powerW:demandKW*1000,voltageV,powerFactor,phase});return{demandKW,currentA}}
+function resistiveVoltageDrop({currentA,lengthM,areaMm2,resistivity=0.0175,phase=1,voltageV}){positive("جریان",currentA);positive("طول",lengthM);positive("سطح مقطع",areaMm2);positive("مقاومت ویژه",resistivity);positive("ولتاژ",voltageV);if(phase!==1&&phase!==3)throw new RangeError("فاز باید ۱ یا ۳ باشد.");const dropV=(phase===1?2:SQRT3)*resistivity*lengthM*currentA/areaMm2;return{dropV,dropPercent:100*dropV/voltageV}}
+function cableTakeoff({runs,lengthM,cores,wastePercent=0}){positive("تعداد مسیر",runs);positive("طول مسیر",lengthM);positive("تعداد رشته",cores);factor("درصد پرت",wastePercent,0,100);const baseM=runs*lengthM*cores;return{baseM,totalM:baseM*(1+wastePercent/100)}}
+return Object.freeze({currentFromPower,powerFromCurrent,demand,resistiveVoltageDrop,cableTakeoff});
+});
