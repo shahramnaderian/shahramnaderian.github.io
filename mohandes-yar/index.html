@@ -11,10 +11,10 @@
 @media(max-width:800px){.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto;gap:4px;padding:7px}.side h3,.sidefoot{display:none}.navbtn{white-space:nowrap;width:auto;padding:8px 11px}.stats{grid-template-columns:1fr 1fr 1fr}.two{grid-template-columns:1fr}}
 @media(max-width:560px){.grid,.fields{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:10px}.stat b{font-size:12px}.stat span{font-size:10px}.pagehead{flex-direction:column}.top{padding-top:18px}.wrap{margin-top:14px}}
 @media print{.top,.side,.actions,.footer,.warning{display:none!important}.wrap{max-width:none;margin:0}.layout{display:block}.page{display:block!important}.tool,.panel{break-inside:avoid;box-shadow:none}}
-</style>
+body[dir="ltr"]{font-family:Arial,Tahoma,sans-serif}body[dir="ltr"] .navbtn{text-align:left}body[dir="ltr"] .checklist{padding-right:0;padding-left:18px}body[dir="ltr"] .side{direction:ltr}body[dir="ltr"] .hero,body[dir="ltr"] .main{direction:ltr}.lang-toggle{position:absolute;right:max(18px,calc((100% - 1160px)/2));top:20px;background:#fff;color:#10243a}.top{position:relative}@media(max-width:800px){.lang-toggle{right:16px;top:14px}}\n</style>
 </head>
 <body>
-<header class="top"><div class="brand">⚡ مهندس‌یار برق</div><div class="en">SHAHRAM ELECTRICAL ENGINEERING · MVP 0.4</div><div class="hero"><h1>محیط کار مهندسی برق ساختمان</h1><p>پروژه‌ها، محاسبات اولیه و کنترل‌های مهندسی در یک فضای ساده و فارسی.</p></div></header>
+<header class="top"><div class="brand">⚡ مهندس‌یار برق</div><div class="en">SHAHRAM ELECTRICAL ENGINEERING · MVP 0.4</div><button class="btn alt lang-toggle" id="languageToggle" type="button">English</button><div class="hero"><h1>محیط کار مهندسی برق ساختمان</h1><p>پروژه‌ها، محاسبات اولیه و کنترل‌های مهندسی در یک فضای ساده و فارسی.</p></div></header>
 <main class="wrap"><div class="layout">
 <aside class="side" aria-label="ناوبری اصلی"><h3>منوی مهندس‌یار</h3>
 <button class="navbtn active" data-page="home">⌂ <span>داشبورد</span></button>
@@ -75,7 +75,7 @@
 <div class="warning"><b>هشدار مهندسی:</b> این نسخه آزمایشی و کمک‌محاسباتی است. نتایج ساده‌شده را مبنای اجرای تأسیسات قرار ندهید. انتخاب کابل، فیوز، کلید، سیستم اتصال زمین و سایر تجهیزات باید توسط مهندس مسئول و با مراجعه به نسخه معتبر مقررات، استانداردهای مربوط و شرایط واقعی پروژه بررسی شود.</div>
 </div></div></main>
 <footer class="footer">© Shahram Naderian · مهندس‌یار برق · MVP 0.4 · <a href="https://shahramnaderian.github.io/">وب‌سایت اصلی</a></footer>
-<script src="./core.js"></script>
+<script src="./core.js"></script><script src="./i18n.js"></script>
 <script>
 const $=id=>document.getElementById(id), num=id=>Number($(id).value), valid=(...v)=>v.every(x=>Number.isFinite(x)&&x>0);
 const fmt=x=>x.toLocaleString('fa-IR',{maximumFractionDigits:2});
